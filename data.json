@@ -1,0 +1,25 @@
+[
+    {
+        "name": "Paris",
+        "country": "France",
+        "budget": 1000.0,
+        "notes": [],
+        "visited": false
+    },
+    {
+        "name": "Rome",
+        "country": "Italy",
+        "budget": 1000.0,
+        "notes": [],
+        "visited": false
+    },
+    {
+        "name": "Tokyo",
+        "country": "Japan",
+        "budget": 1200.0,
+        "notes": [
+            "travelling with kids"
+        ],
+        "visited": false
+    }
+]

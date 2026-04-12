@@ -1,38 +1,39 @@
 import json
 import os
-from typing import List
-from dataclasses import asdict
-from src.models import Destination, TripCollection
+from models import Destination, TripCollection
 
-DATA_FILE = "data/trips.json"
+FILE_PATH = "data.json"
 
 
-def load_trips() -> TripCollection:
-    collection = TripCollection()
+def load_trips():
+    if not os.path.exists(FILE_PATH):
+        return TripCollection()
 
-    if not os.path.exists(DATA_FILE):
-        return collection
-
-    with open(DATA_FILE, "r") as f:
+    with open(FILE_PATH, "r") as f:
         data = json.load(f)
 
+    trips = TripCollection()
+
     for item in data:
-        destination = Destination(
-            name=item["name"],
-            country=item["country"],
-            budget=item["budget"],
-            notes=item.get("notes", []),
-            date_added=item.get("date_added", "")
-        )
-        collection.add(destination)
+        dest = Destination(item["name"], item["country"], item["budget"])
+        dest.notes = item.get("notes", [])
+        dest.visited = item.get("visited", False)
+        trips.add(dest)
 
-    return collection
+    return trips
 
 
-def save_trips(collection: TripCollection) -> None:
-    os.makedirs("data", exist_ok=True)
+def save_trips(trips):
+    data = []
 
-    data = [asdict(trip) for trip in collection.get_all()]
+    for trip in trips.get_all():
+        data.append({
+            "name": trip.name,
+            "country": trip.country,
+            "budget": trip.budget,
+            "notes": trip.notes,
+            "visited": trip.visited
+        })
 
-    with open(DATA_FILE, "w") as f:
+    with open(FILE_PATH, "w") as f:
         json.dump(data, f, indent=4)

@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Paris",
+        "country": "France",
+        "budget": 1000.0,
+        "notes": [],
+        "date_added": "2026-04-05",
+        "visited": true
+    },
+    {
+        "name": "Yonkers",
+        "country": "United States",
+        "budget": 10000.0,
+        "notes": [],
+        "date_added": "2026-04-05",
+        "visited": false
+    }
+]
