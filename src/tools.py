@@ -1,82 +1,30 @@
-import json
+def budget_breakdown(destination, budget, days):
+    daily = budget / days
+    return f"""Trip to {destination} for {days} days:
 
-# -------------------------------
-# TOOL 1: Budget Breakdown
-# -------------------------------
-def budget_breakdown(total_budget, days):
-    daily = total_budget / days
+Total budget: ${budget}
+Daily budget: ${daily:.2f}
 
-    breakdown = {
-        "accommodation": round(daily * 0.4, 2),
-        "food": round(daily * 0.25, 2),
-        "transport": round(daily * 0.15, 2),
-        "activities": round(daily * 0.2, 2),
-    }
+Suggested:
+- Hotel: ${daily * 0.4:.2f}
+- Food: ${daily * 0.3:.2f}
+- Activities: ${daily * 0.2:.2f}
+- Transport: ${daily * 0.1:.2f}
+"""
 
-    return json.dumps({
-        "daily_budget": round(daily, 2),
-        "breakdown": breakdown
-    })
-
-
-# -------------------------------
-# TOOL 2: Weather
-# -------------------------------
 def get_weather(city):
-    return json.dumps({
-        "city": city,
-        "temperature_C": "20",
-        "description": "Sunny"
-    })
+    return f"The weather in {city} is mild and pleasant."
 
-
-# -------------------------------
-# TOOL 3: Guides Search
-# -------------------------------
 def search_guides_tool(query):
-    return json.dumps({
-        "results": [
-            f"Top places for {query}",
-            "Visit landmarks",
-            "Try local food"
-        ]
-    })
+    return f"Guide info about {query}"
 
-
-# -------------------------------
-# REACT AGENT (no API)
-# -------------------------------
 def run_agent(user_input):
-    text = user_input.lower()
+    response = ""
 
-    print("\n[Agent Thinking...]\n")
+    if "budget" in user_input.lower() or "$" in user_input:
+        response += budget_breakdown("Paris", 1500, 10)
 
-    final_answer = "Your travel info is ready."
+    if "weather" in user_input.lower():
+        response += "\n" + get_weather("Paris")
 
-    if "budget" in text:
-        print("[Tool call] budget_breakdown")
-        result = budget_breakdown(1200, 8)
-        print("[Tool result]", result)
-
-    if "weather" in text:
-        print("[Tool call] get_weather")
-        result = get_weather("Paris")
-        print("[Tool result]", result)
-
-    if "tokyo" in text:
-        print("[Tool call] search_guides_tool")
-        result = search_guides_tool("Tokyo")
-        print("[Tool result]", result)
-
-    print("\nFinal Answer:\n" + final_answer + "\n")
-
-    return final_answer
-
-
-# -------------------------------
-# TEST
-# -------------------------------
-if __name__ == "__main__":
-    print(budget_breakdown(1200, 8))
-    print(get_weather("Paris"))
-    print(search_guides_tool("Tokyo"))
+    return response if response else "I couldn't find relevant tools to use."
